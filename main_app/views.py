@@ -11,3 +11,20 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def finches_index(request):
+    return render(request, 'finches/index.html', {'finches': finches})
+
+
+class Finch:
+    def __init__(self, name, breed, description, age):
+        self.name = name
+        self.breed = breed
+        self.description = description
+        self.age = age
+
+
+finches = [
+    Finch('Robin', 'The Spice Finch', 'Cute bird', 2)
+]
