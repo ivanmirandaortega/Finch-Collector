@@ -1,4 +1,4 @@
-from django.form import ModelForm
+from django.forms import ModelForm
 from .models import Feeding
 
 class FeedingForm(ModelForm):
