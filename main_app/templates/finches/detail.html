@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="col s6">
-        <form action="" method="post">
+        <form action="{% url 'add_feeding' finch.id %}" method="post">
             {% csrf_token %}
             {{ feeding_form.as_p }}
             <input type="submit" class="btn" value="Add Feeding">
