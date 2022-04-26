@@ -27,7 +27,6 @@ def finches_detail(request, finch_id):
 class FinchCreate(CreateView):
     model = Finch
     fields = ['name', 'breed', 'description', 'age']
-    success_url = '/finches/'
 
 class FinchUpdate(UpdateView): 
     model = Finch 
