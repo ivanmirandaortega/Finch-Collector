@@ -60,9 +60,20 @@ def add_feeding(request, finch_id):
 		# with same id as the argument to the function finch_id
     return redirect('detail', finch_id=finch_id)
 
+class ToyList(ListView):
+    model = Toy
+
 class ToyCreate(CreateView): 
     model = Toy
     fields = '__all__'
 
 class ToyDetail(DetailView):
     model = Toy
+
+class ToyUpdate(UpdateView):
+    model = Toy
+    fields = ['name', 'color']
+
+class ToyDelete(DeleteView): 
+    model = Toy
+    success_url = '/toys/'
