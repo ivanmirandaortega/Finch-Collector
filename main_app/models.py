@@ -3,8 +3,6 @@ from django.urls import reverse
 from datetime import date
 
 # Create your models here.
-
-
 class Finch(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
@@ -20,6 +18,8 @@ class Finch(models.Model):
     def fed_for_today(self):
         return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)
 
+# B will be the value, So this is what we'll store in the db
+# Breakfast is the user friendly view, so what you see when you use a dropdown
 MEALS = (
     ('B', 'Breakfast'),
     ('L', 'Lunch'),
@@ -34,9 +34,12 @@ class Feeding(models.Model):
             default=MEALS[0][0]
     )
 
+	# the foregin key always goes on the many side
+	# internally it will be cat_id the _id automatically gets added
     finch = models.ForeignKey(Finch, on_delete=models.CASCADE)
 
     def __str__(self):
+        # this method will gives us the friendly meal choices value, so like Breakfast instead of B
         return f'{self.get_meal_display()} on {self.date}'
 
     class Meta:
