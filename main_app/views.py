@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from .models import Finch, Toy
 from .forms import FeedingForm
 # the template the CreateView and the UpdateView use is the same
@@ -62,3 +63,6 @@ def add_feeding(request, finch_id):
 class ToyCreate(CreateView): 
     model = Toy
     fields = '__all__'
+
+class ToyDetail(DetailView):
+    model = Toy
