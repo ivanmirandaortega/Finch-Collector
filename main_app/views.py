@@ -62,6 +62,10 @@ def add_feeding(request, finch_id):
 		# with same id as the argument to the function finch_id
     return redirect('detail', finch_id=finch_id)
 
+def assoc_toy(request, finch_id, toy_id):
+    Finch.objects.get(id=finch_id).toys.add(toy_id)
+    return redirect('detail', finch_id=finch_id)
+
 class ToyList(ListView):
     model = Toy
 

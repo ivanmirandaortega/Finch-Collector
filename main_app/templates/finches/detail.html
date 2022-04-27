@@ -82,7 +82,7 @@
                         </span>
                     </div>
                     <div class="card-action">
-                        <form action="" method="post">
+                        <form action="{% url 'assoc_toy' finch.id toy.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn">Add</button>
                         </form>
