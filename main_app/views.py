@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Finch
+from .models import Finch, Toy
 from .forms import FeedingForm
 # the template the CreateView and the UpdateView use is the same
 # templates/<app_name>/<model>_form.html
@@ -58,3 +58,7 @@ def add_feeding(request, finch_id):
         new_feeding.save()# adds the feeding to the database, and the feeding be associated with the finch
 		# with same id as the argument to the function finch_id
     return redirect('detail', finch_id=finch_id)
+
+class ToyCreate(CreateView): 
+    model = Toy
+    fields = '__all__'
