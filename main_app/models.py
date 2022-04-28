@@ -3,6 +3,14 @@ from django.urls import reverse
 from datetime import date
 
 # Create your models here.
+# B will be the value, So this is what we'll store in the db
+# Breakfast is the user friendly view, so what you see when you use a dropdown
+MEALS = (
+    ('B', 'Breakfast'),
+    ('L', 'Lunch'),
+    ('D', 'Dinner')
+)
+
 class Toy(models.Model):
     name = models.CharField(max_length=50)
     color = models.CharField(max_length=20)
@@ -29,13 +37,12 @@ class Finch(models.Model):
     def fed_for_today(self):
         return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)
 
-# B will be the value, So this is what we'll store in the db
-# Breakfast is the user friendly view, so what you see when you use a dropdown
-MEALS = (
-    ('B', 'Breakfast'),
-    ('L', 'Lunch'),
-    ('D', 'Dinner')
-)
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    finch = models.ForeignKey(Finch, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Photo for finch_id: {self.finch_id} @{self.url}'
 
 class Feeding(models.Model): 
     date = models.DateField('feeding date')
