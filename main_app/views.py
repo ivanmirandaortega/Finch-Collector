@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Finch, Toy
+import uuid
+import boto3
+from .models import Finch, Toy, Photo
 from .forms import FeedingForm
 # the template the CreateView and the UpdateView use is the same
 # templates/<app_name>/<model>_form.html
@@ -9,6 +11,10 @@ from .forms import FeedingForm
 
 # Create your views here.
 from django.http import HttpResponse
+
+
+S3_BASE_URL = 'https://s3.us-west-1.amazonaws.com/'
+BUCKET = 'finchcollec'
 
 class FinchCreate(CreateView):
     model = Finch
@@ -60,6 +66,19 @@ def add_feeding(request, finch_id):
         new_feeding.finch_id = finch_id
         new_feeding.save()# adds the feeding to the database, and the feeding be associated with the finch
 		# with same id as the argument to the function finch_id
+    return redirect('detail', finch_id=finch_id)
+
+def add_photo(request, finch_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            Photo.objects.create(url=url, finch_id=finch_id)
+        except:
+            print('An error occurred uploading file to S3')
     return redirect('detail', finch_id=finch_id)
 
 def assoc_toy(request, finch_id, toy_id):
