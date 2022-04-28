@@ -18,7 +18,13 @@ BUCKET = 'finchcollec'
 
 class FinchCreate(CreateView):
     model = Finch
-    fields = '__all__'
+    fields = ['name', 'breed', 'description', 'age']
+
+    # This inheritedmethod is called when a valid finch form is being submitted
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = self.request.user # form.instance is the cat
+        return super().form_valid(form)
 
 class FinchUpdate(UpdateView): 
     model = Finch 
@@ -32,7 +38,7 @@ class FinchDelete(DeleteView):
     success_url = '/finches/'
 
 def home(request):
-    return HttpResponse('<h1>Welcome</h1>')
+    return render(request, 'home.html')
 
 
 def about(request):
