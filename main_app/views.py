@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 import uuid
 import boto3
 from .models import Finch, Toy, Photo
@@ -15,6 +17,24 @@ from django.http import HttpResponse
 
 S3_BASE_URL = 'https://s3.us-west-1.amazonaws.com/'
 BUCKET = 'finchcollec'
+
+def signup(request):
+    # on a GET lets render a template with a form 
+    error_message = ''
+    if request.method == 'POST':
+        # On a POST lets signup the user and log them in
+        # This is how to create a 'user' form object that inlcudes the data from the browser
+        form = UserCreationForm(request.POST)
+        if form.is_valid(): 
+            # This will add the user to the database 
+            user = form.save()
+            login(request, user) # user is logged in and available on every request and in every template 
+            return redirect('index')
+        else: 
+            error_message = 'Invalid sign up - try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
 
 class FinchCreate(CreateView):
     model = Finch
